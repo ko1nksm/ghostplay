@@ -34,13 +34,17 @@ gp_prompt_delay() {
 }
 
 gp_type() {
-  buf2="$1"
-  while [ "$buf2" ]; do
-    ch=${buf2%"${buf2#?}"} buf2=${buf2#?}
-    gp_puts "$ch"
-    gp_type_delay
-  done
-  echo
+  if [ $# -lt 2 ]; then
+    gp_type "${1%"${1#?}"}" "${1#?}"
+  else
+    if [ "$1" = "" ]; then
+      echo
+    else
+      gp_puts "$1"
+      gp_type_delay
+      gp_type "${2%"${2#?}"}" "${2#?}"
+    fi
+  fi
 }
 
 gp_type_delay() {
