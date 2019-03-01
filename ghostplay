@@ -5,16 +5,19 @@ GP_HOSTNAME=$(hostname)
 
 eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
 
-GP_RESET="${GP_ESC}[0m"
-GP_BOLD="${GP_ESC}[1m" GP_UNDERLINE="${GP_ESC}[4m" GP_REVERSE="${GP_ESC}[7m"
-GP_BLACK="${GP_ESC}[30m"   GP_BG_BLACK="${GP_ESC}[40m"
-GP_RED="${GP_ESC}[31m"     GP_BG_RED="${GP_ESC}[41m"
-GP_GREEN="${GP_ESC}[32m"   GP_BG_GREEN="${GP_ESC}[42m"
-GP_YELLOW="${GP_ESC}[33m"  GP_BG_YELLOW="${GP_ESC}[43m"
-GP_BLUE="${GP_ESC}[34m"    GP_BG_BLUE="${GP_ESC}[44m"
-GP_MAGENTA="${GP_ESC}[35m" GP_BG_MAGENTA="${GP_ESC}[45m"
-GP_CYAN="${GP_ESC}[36m"    GP_BG_CYAN="${GP_ESC}[46m"
-GP_WHITE="${GP_ESC}[37m"   GP_BG_WHITE="${GP_ESC}[47m"
+# shellcheck disable=SC2034
+{
+  GP_RESET="${GP_ESC}[0m"
+  GP_BOLD="${GP_ESC}[1m" GP_UNDERLINE="${GP_ESC}[4m" GP_REVERSE="${GP_ESC}[7m"
+  GP_BLACK="${GP_ESC}[30m"   GP_BG_BLACK="${GP_ESC}[40m"
+  GP_RED="${GP_ESC}[31m"     GP_BG_RED="${GP_ESC}[41m"
+  GP_GREEN="${GP_ESC}[32m"   GP_BG_GREEN="${GP_ESC}[42m"
+  GP_YELLOW="${GP_ESC}[33m"  GP_BG_YELLOW="${GP_ESC}[43m"
+  GP_BLUE="${GP_ESC}[34m"    GP_BG_BLUE="${GP_ESC}[44m"
+  GP_MAGENTA="${GP_ESC}[35m" GP_BG_MAGENTA="${GP_ESC}[45m"
+  GP_CYAN="${GP_ESC}[36m"    GP_BG_CYAN="${GP_ESC}[46m"
+  GP_WHITE="${GP_ESC}[37m"   GP_BG_WHITE="${GP_ESC}[47m"
+}
 
 gp_sleep() {
   sleep "$1"
@@ -103,7 +106,7 @@ while IFS= read -r ghostplay_line || [ "$ghostplay_line" ]; do
   done
 
   case $ghostplay_work in
-    "# ghostplay "*) eval ghostplay_${ghostplay_work#"# ghostplay "} ;;
+    "# ghostplay "*) eval "ghostplay_${ghostplay_work#"# ghostplay "}" ;;
     "" | "#!"*) ;;
     *) ghostplay_line "$ghostplay_line" ;;
   esac
