@@ -1,0 +1,107 @@
+#!/bin/sh
+
+GP_USERNAME=$(whoami)
+GP_HOSTNAME=$(hostname)
+
+eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
+
+GP_RESET="${GP_ESC}[0m"
+GP_BOLD="${GP_ESC}[1m" GP_UNDERLINE="${GP_ESC}[4m" GP_REVERSE="${GP_ESC}[7m"
+GP_BLACK="${GP_ESC}[30m"   GP_BG_BLACK="${GP_ESC}[40m"
+GP_RED="${GP_ESC}[31m"     GP_BG_RED="${GP_ESC}[41m"
+GP_GREEN="${GP_ESC}[32m"   GP_BG_GREEN="${GP_ESC}[42m"
+GP_YELLOW="${GP_ESC}[33m"  GP_BG_YELLOW="${GP_ESC}[43m"
+GP_BLUE="${GP_ESC}[34m"    GP_BG_BLUE="${GP_ESC}[44m"
+GP_MAGENTA="${GP_ESC}[35m" GP_BG_MAGENTA="${GP_ESC}[45m"
+GP_CYAN="${GP_ESC}[36m"    GP_BG_CYAN="${GP_ESC}[46m"
+GP_WHITE="${GP_ESC}[37m"   GP_BG_WHITE="${GP_ESC}[47m"
+
+gp_sleep() {
+  sleep "$1"
+}
+
+gp_puts() {
+  printf '%s' "$*"
+}
+
+gp_prompt() {
+  gp_puts "${GP_GREEN}${GP_USERNAME}@${GP_HOSTNAME}" \
+          "${GP_MAGENTA}${PWD##*/}${GP_RESET}\$ "
+}
+
+gp_prompt_delay() {
+  gp_sleep 0.5
+}
+
+gp_type() {
+  buf2="$1"
+  while [ "$buf2" ]; do
+    ch=${buf2%"${buf2#?}"} buf2=${buf2#?}
+    gp_puts "$ch"
+    gp_type_delay
+  done
+  echo
+}
+
+gp_type_delay() {
+  gp_sleep 0.02
+}
+
+gp_command() {
+  gp_prompt
+  gp_prompt_delay
+  gp_type "$1"
+  gp_exec "$1"
+}
+
+gp_exec() {
+  eval "$1"
+}
+
+ghostplay_silent() {
+  ghostplay_mode="silent"
+}
+
+ghostplay_batch() {
+  ghostplay_mode="batch"
+}
+
+ghostplay_end() {
+  if [ "$ghostplay_buf" ]; then
+    if [ "$ghostplay_mode" = "batch" ]; then
+      gp_command "$ghostplay_buf"
+    else
+      gp_exec "$ghostplay_buf"
+    fi
+    ghostplay_buf=""
+  fi
+  ghostplay_mode=""
+}
+
+ghostplay_line() {
+  case $ghostplay_mode in
+    batch | silent) ghostplay_buf="$ghostplay_buf${ghostplay_buf:+$GP_LF}$1" ;;
+    *) gp_command "$1" ;;
+  esac
+}
+
+ghostplay_sleep() {
+  gp_sleep "$1"
+}
+
+ghostplay_mode=""
+ghostplay_buf=""
+
+while IFS= read -r ghostplay_line || [ "$ghostplay_line" ]; do
+  ghostplay_work=$ghostplay_line
+
+  while [ "$ghostplay_work" != "${ghostplay_work# }" ]; do
+    ghostplay_work=${ghostplay_work# }
+  done
+
+  case $ghostplay_work in
+    "# ghostplay "*) eval ghostplay_${ghostplay_work#"# ghostplay "} ;;
+    "" | "#!"*) ;;
+    *) ghostplay_line "$ghostplay_line" ;;
+  esac
+done < "$1"
