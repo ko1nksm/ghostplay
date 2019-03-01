@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo This is ghost play example
+echo This is ghostplay example
 
 # ghostplay silent
 echo silent
