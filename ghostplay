@@ -68,11 +68,10 @@ ghostplay_batch() {
 
 ghostplay_end() {
   if [ "$ghostplay_buf" ]; then
-    if [ "$ghostplay_mode" = "batch" ]; then
-      gp_command "$ghostplay_buf"
-    else
-      gp_exec "$ghostplay_buf"
-    fi
+    case $ghostplay_mode in
+      batch) gp_command "$ghostplay_buf" ;;
+      silent) gp_exec "$ghostplay_buf" ;;
+    esac
     ghostplay_buf=""
   fi
   ghostplay_mode=""
@@ -80,8 +79,8 @@ ghostplay_end() {
 
 ghostplay_line() {
   case $ghostplay_mode in
-    batch | silent) ghostplay_buf="$ghostplay_buf${ghostplay_buf:+$GP_LF}$1" ;;
-    *) gp_command "$1" ;;
+    "") gp_command "$1" ;;
+    *) ghostplay_buf="$ghostplay_buf${ghostplay_buf:+$GP_LF}$1" ;;
   esac
 }
 
