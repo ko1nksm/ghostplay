@@ -65,28 +65,6 @@ gp_exec() {
   eval "$1"
 }
 
-ghostplay_silent() {
-  ghostplay_mode="silent"
-}
-
-ghostplay_batch() {
-  ghostplay_mode="batch"
-}
-
-ghostplay_flush() {
-  if [ "$ghostplay_buf" ]; then
-    case $ghostplay_mode in
-      batch) gp_command "$ghostplay_buf" ;;
-      silent) gp_exec "$ghostplay_buf" ;;
-    esac
-    ghostplay_buf=""
-  fi
-}
-
-ghostplay_end() {
-  ghostplay_flush
-  ghostplay_mode=""
-}
 
 ghostplay_line() {
   case $ghostplay_mode in
@@ -95,7 +73,29 @@ ghostplay_line() {
   esac
 }
 
-ghostplay_sleep() {
+ghostplay_directive_silent() {
+  ghostplay_mode="silent"
+}
+
+ghostplay_directive_batch() {
+  ghostplay_mode="batch"
+}
+
+ghostplay_directive_flush() {
+  [ "$ghostplay_buf" ] || return 0
+  case $ghostplay_mode in
+    batch) gp_command "$ghostplay_buf" ;;
+    silent) gp_exec "$ghostplay_buf" ;;
+  esac
+  ghostplay_buf=""
+}
+
+ghostplay_directive_end() {
+  ghostplay_directive_flush
+  ghostplay_mode=""
+}
+
+ghostplay_directive_sleep() {
   gp_sleep "$1"
 }
 
@@ -110,7 +110,7 @@ while IFS= read -r ghostplay_line || [ "$ghostplay_line" ]; do
   done
 
   case $ghostplay_work in
-    "# ghostplay "*) eval "ghostplay_${ghostplay_work#"# ghostplay "}" ;;
+    "# ghostplay "*) eval "ghostplay_directive_${ghostplay_work#"# ghostplay "}" ;;
     "" | "#"*) ;;
     *) ghostplay_line "$ghostplay_line" ;;
   esac
