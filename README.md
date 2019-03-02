@@ -20,9 +20,11 @@ echo ghostplay types your script and execute.
 ghostplay example/script.sh
 ```
 
+See what happens in your terminal. ghost is typing your script!
+
 ![demo](demo.gif)
 
-Another example is in the [example](/example) directory.
+Another example scripts is in the [example](/example) directory.
 
 ## Cooperation with terminal session recorder
 
