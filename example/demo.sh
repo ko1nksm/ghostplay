@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# ghostplay silent
+ghostplay_cleanup() {
+  if [ -f your.script.sh ]; then
+    rm your.script.sh
+  fi
+}
+# ghostplay end
+
 : 1. Write your script
 
 # ghostplay batch
@@ -12,7 +20,3 @@ DATA
 : 2. Execute by ghostplay
 
 ./ghostplay your.script.sh
-
-# ghostplay silent
-rm your.script.sh
-# ghostplay end
