@@ -41,30 +41,45 @@ ghostplay_puts() {
 }
 
 ghostplay_prompt() {
+  ghostplay_before_prompt
   ghostplay_puts "${GP_GREEN}${GP_USERNAME}@${GP_HOSTNAME}" \
           "${GP_MAGENTA}${PWD##*/}${GP_RESET}\$ "
+  ghostplay_after_prompt
 }
 
-ghostplay_prompt_delay() {
+ghostplay_before_prompt() {
+  :
+}
+
+ghostplay_after_prompt() {
   ghostplay_sleep 0.5
 }
 
-ghostplay_type() {
+ghostplay_input() {
   if [ $# -lt 2 ]; then
-    ghostplay_type "${1%"${1#?}"}" "${1#?}"
+    ghostplay_input "${1%"${1#?}"}" "${1#?}"
   else
     if [ "$1" = "" ]; then
       echo
     else
-      ghostplay_puts "$1"
-      ghostplay_type_delay
-      ghostplay_type "${2%"${2#?}"}" "${2#?}"
+      ghostplay_type "$1"
+      ghostplay_input "${2%"${2#?}"}" "${2#?}"
     fi
   fi
 }
 
-ghostplay_type_delay() {
+ghostplay_type() {
+  ghostplay_before_type
+  ghostplay_puts "$1"
+  ghostplay_after_type
+}
+
+ghostplay_before_type() {
   ghostplay_sleep 0.02
+}
+
+ghostplay_after_type() {
+  :
 }
 
 ghostplay_command_and_exec() {
@@ -78,8 +93,7 @@ ghostplay_exec() {
 
 ghostplay_command() {
   ghostplay_prompt
-  ghostplay_prompt_delay
-  ghostplay_type "$1"
+  ghostplay_input "$1"
 }
 
 ghostplay_line() {
