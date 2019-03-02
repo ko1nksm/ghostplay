@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Usage: ghostplay example/script.sh
+: Usage ghostplay example/script.sh
 echo This is ghostplay example
 
 # ghostplay silent
