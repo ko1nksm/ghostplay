@@ -19,56 +19,56 @@ eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
   GP_WHITE="${GP_ESC}[37m"   GP_BG_WHITE="${GP_ESC}[47m"
 }
 
-gp_sleep() {
+ghostplay_sleep() {
   sleep "$1"
 }
 
-gp_puts() {
+ghostplay_puts() {
   printf '%s' "$*"
 }
 
-gp_prompt() {
-  gp_puts "${GP_GREEN}${GP_USERNAME}@${GP_HOSTNAME}" \
+ghostplay_prompt() {
+  ghostplay_puts "${GP_GREEN}${GP_USERNAME}@${GP_HOSTNAME}" \
           "${GP_MAGENTA}${PWD##*/}${GP_RESET}\$ "
 }
 
-gp_prompt_delay() {
-  gp_sleep 0.5
+ghostplay_prompt_delay() {
+  ghostplay_sleep 0.5
 }
 
-gp_type() {
+ghostplay_type() {
   if [ $# -lt 2 ]; then
-    gp_type "${1%"${1#?}"}" "${1#?}"
+    ghostplay_type "${1%"${1#?}"}" "${1#?}"
   else
     if [ "$1" = "" ]; then
       echo
     else
-      gp_puts "$1"
-      gp_type_delay
-      gp_type "${2%"${2#?}"}" "${2#?}"
+      ghostplay_puts "$1"
+      ghostplay_type_delay
+      ghostplay_type "${2%"${2#?}"}" "${2#?}"
     fi
   fi
 }
 
-gp_type_delay() {
-  gp_sleep 0.02
+ghostplay_type_delay() {
+  ghostplay_sleep 0.02
 }
 
-gp_command() {
-  gp_prompt
-  gp_prompt_delay
-  gp_type "$1"
-  gp_exec "$1"
+ghostplay_command() {
+  ghostplay_prompt
+  ghostplay_prompt_delay
+  ghostplay_type "$1"
+  ghostplay_exec "$1"
 }
 
-gp_exec() {
+ghostplay_exec() {
   eval "$1"
 }
 
 
 ghostplay_line() {
   case $ghostplay_mode in
-    "") gp_command "$1" ;;
+    "") ghostplay_command "$1" ;;
     *) ghostplay_buf="$ghostplay_buf${ghostplay_buf:+$GP_LF}$1" ;;
   esac
 }
@@ -84,8 +84,8 @@ ghostplay_directive_batch() {
 ghostplay_directive_flush() {
   [ "$ghostplay_buf" ] || return 0
   case $ghostplay_mode in
-    batch) gp_command "$ghostplay_buf" ;;
-    silent) gp_exec "$ghostplay_buf" ;;
+    batch) ghostplay_command "$ghostplay_buf" ;;
+    silent) ghostplay_exec "$ghostplay_buf" ;;
   esac
   ghostplay_buf=""
 }
@@ -96,7 +96,7 @@ ghostplay_directive_end() {
 }
 
 ghostplay_directive_sleep() {
-  gp_sleep "$1"
+  ghostplay_sleep "$1"
 }
 
 ghostplay_mode=""
