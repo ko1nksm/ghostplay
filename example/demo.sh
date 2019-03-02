@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # ghostplay silent
-ghostplay_cleanup() {
+ghostplay_cleanup_handler() {
   if [ -f your.script.sh ]; then
     rm your.script.sh
   fi

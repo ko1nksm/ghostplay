@@ -1,13 +1,13 @@
 #!/bin/sh
 
-ghostplay_cleanup() { :; }
+ghostplay_cleanup_handler() { :; }
 
 ghostplay_sigint_handler() {
   exit 1
 }
 
 ghostplay_exit_handler() {
-  ghostplay_cleanup
+  ghostplay_cleanup_handler
 }
 
 trap 'ghostplay_sigint_handler' INT
@@ -18,26 +18,34 @@ GP_HOSTNAME=$(hostname)
 
 eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
 
-ghostplay_sleep() {
+ghostplay_custom_sleep() {
   sleep "$1"
+}
+
+ghostplay_sleep() {
+  ghostplay_custom_sleep "$1"
 }
 
 ghostplay_puts() {
   printf '%s' "$*"
 }
 
-ghostplay_prompt() {
-  ghostplay_before_prompt
+ghostplay_custom_prompt() {
   ghostplay_puts "${GP_ESC}[32m${GP_USERNAME}@${GP_HOSTNAME}" \
           "${GP_ESC}[35m${PWD##*/}${GP_ESC}[0m\$ "
-  ghostplay_after_prompt
 }
 
-ghostplay_before_prompt() {
+ghostplay_prompt() {
+  ghostplay_before_prompt_hook
+  ghostplay_custom_prompt
+  ghostplay_after_prompt_hook
+}
+
+ghostplay_before_prompt_hook() {
   :
 }
 
-ghostplay_after_prompt() {
+ghostplay_after_prompt_hook() {
   ghostplay_sleep 0.5
 }
 
@@ -55,16 +63,16 @@ ghostplay_input() {
 }
 
 ghostplay_type() {
-  ghostplay_before_type
+  ghostplay_before_type_hook
   ghostplay_puts "$1"
-  ghostplay_after_type
+  ghostplay_after_type_hook
 }
 
-ghostplay_before_type() {
+ghostplay_before_type_hook() {
   ghostplay_sleep 0.02
 }
 
-ghostplay_after_type() {
+ghostplay_after_type_hook() {
   :
 }
 
