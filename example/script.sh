@@ -9,8 +9,10 @@ echo silent
 
 # ghostplay batch
 cat<<DATA
-multi line test
-multi line test
-multi line test
+multi line test 1
+multi line test 2
+multi line test 3
 DATA
+# ghostplay flush
+echo flush at before this line
 # ghostplay end

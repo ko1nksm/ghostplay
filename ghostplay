@@ -73,7 +73,7 @@ ghostplay_batch() {
   ghostplay_mode="batch"
 }
 
-ghostplay_end() {
+ghostplay_flush() {
   if [ "$ghostplay_buf" ]; then
     case $ghostplay_mode in
       batch) gp_command "$ghostplay_buf" ;;
@@ -81,6 +81,10 @@ ghostplay_end() {
     esac
     ghostplay_buf=""
   fi
+}
+
+ghostplay_end() {
+  ghostplay_flush
   ghostplay_mode=""
 }
 
