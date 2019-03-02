@@ -54,10 +54,8 @@ ghostplay_type_delay() {
   ghostplay_sleep 0.02
 }
 
-ghostplay_command() {
-  ghostplay_prompt
-  ghostplay_prompt_delay
-  ghostplay_type "$1"
+ghostplay_command_and_exec() {
+  ghostplay_command "$1"
   ghostplay_exec "$1"
 }
 
@@ -65,27 +63,37 @@ ghostplay_exec() {
   eval "$1"
 }
 
+ghostplay_command() {
+  ghostplay_prompt
+  ghostplay_prompt_delay
+  ghostplay_type "$1"
+}
 
 ghostplay_line() {
   case $ghostplay_mode in
-    "") ghostplay_command "$1" ;;
+    "") ghostplay_command_and_exec "$1" ;;
     *) ghostplay_buf="$ghostplay_buf${ghostplay_buf:+$GP_LF}$1" ;;
   esac
-}
-
-ghostplay_directive_silent() {
-  ghostplay_mode="silent"
 }
 
 ghostplay_directive_batch() {
   ghostplay_mode="batch"
 }
 
+ghostplay_directive_silent() {
+  ghostplay_mode="silent"
+}
+
+ghostplay_directive_fake() {
+  ghostplay_mode="fake"
+}
+
 ghostplay_directive_flush() {
   [ "$ghostplay_buf" ] || return 0
   case $ghostplay_mode in
-    batch) ghostplay_command "$ghostplay_buf" ;;
+    batch) ghostplay_command_and_exec "$ghostplay_buf" ;;
     silent) ghostplay_exec "$ghostplay_buf" ;;
+    fake) ghostplay_command "$ghostplay_buf" ;;
   esac
   ghostplay_buf=""
 }

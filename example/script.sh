@@ -16,3 +16,8 @@ DATA
 # ghostplay flush
 echo flush at before this line
 # ghostplay end
+
+
+# ghostplay fake
+echo fake
+# ghostplay end
