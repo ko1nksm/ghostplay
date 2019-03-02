@@ -150,3 +150,6 @@ while IFS= read -r ghostplay_line || [ "$ghostplay_line" ]; do
     *) ghostplay_line "$ghostplay_line" ;;
   esac
 done < "$1"
+
+# workaround: seq2gif is lose the last line.
+echo
