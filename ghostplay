@@ -15,6 +15,7 @@ trap 'ghostplay_exit_handler' EXIT
 
 GP_USERNAME=$(whoami)
 GP_HOSTNAME=$(hostname)
+GP_SOURCE=$1
 
 eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
 

@@ -91,9 +91,10 @@ Called after type one character. (Default: none)
 
 You can use those variables in your script.
 
-| Name        | Value              |
-| ----------- | ------------------ |
-| GP_USERNAME | User name          |
-| GP_HOSTNAME | Host name          |
-| GP_LF       | New line (0x0A)    |
-| GP_ESC      | Escape code (0x1B) |
+| Name        | Value               |
+| ----------- | ------------------- |
+| GP_USERNAME | User name           |
+| GP_HOSTNAME | Host name           |
+| GP_SOURCE   | File name of script |
+| GP_LF       | New line (0x0A)     |
+| GP_ESC      | Escape code (0x1B)  |
