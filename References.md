@@ -3,7 +3,7 @@
 ## Directives
 
 ```
-# ghostplay <directive> [<parameters>...]
+#ghostplay <directive> [<parameters>...]
 ```
 
 ### batch
@@ -39,7 +39,7 @@ Sleep specified seconds.
 
 If you want to change default behavior, (re)define the function.
 
-### ghostplay_custom_prompt
+###ghostplay_custom_prompt
 
 If you want to change prompt, redefine the `ghostplay_custom_prompt` function.
 
@@ -51,7 +51,7 @@ ghostplay_custom_prompt() {
 }
 ```
 
-### ghostplay_custom_sleep
+###ghostplay_custom_sleep
 
 ghostplay use `sleep` command to sleep. `sleep` command assume to can use fractional value. If you are using `sleep` command that can not use fractional values, you will need to redefine `ghostplay_custom_sleep` function.
 
@@ -65,25 +65,25 @@ ghostplay_custom_sleep() {
 
 ## Handlers
 
-### ghostplay_cleanup_handler
+###ghostplay_cleanup_handler
 
 Called after end of script (include Ctrl+C). You can write cleanup code.
 
 ## Hooks
 
-### ghostplay_before_prompt_hook
+###ghostplay_before_prompt_hook
 
 Called before the prompt is displayed. (Default: none)
 
-### ghostplay_after_prompt_hook
+###ghostplay_after_prompt_hook
 
 Called after the prompt is displayed. (Default: ```ghostplay_sleep 0.5```)
 
-### ghostplay_before_type_hook
+###ghostplay_before_type_hook
 
 Called before type one character. (Default: ```ghostplay_sleep 0.02```)
 
-### ghostplay_after_type_hook
+###ghostplay_after_type_hook
 
 Called after type one character. (Default: none)
 

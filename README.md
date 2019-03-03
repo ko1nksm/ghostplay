@@ -62,22 +62,22 @@ Example
 ```sh
 #!/bin/sh
 
-# ghostplay silent
+#ghostplay silent
 ghostplay_custom_prompt() { # change prompt
   printf '$ '
 }
-# ghostplay end
+#ghostplay end
 
 echo This is your script.
 echo ghostplay types your script and execute.
 
-# ghostplay sleep 3
+#ghostplay sleep 3
 
-# ghostplay batch
+#ghostplay batch
 cat<<DATA
 line1
 line2
 line3
 DATA
-# ghostplay end
+#ghostplay end
 ```

@@ -139,7 +139,7 @@ while IFS= read -r ghostplay_line || [ "$ghostplay_line" ]; do
   done
 
   case $ghostplay_work in
-    "# ghostplay "*) eval "ghostplay_directive_${ghostplay_work#"# ghostplay "}" ;;
+    "#ghostplay "*) eval "ghostplay_directive_${ghostplay_work#"#ghostplay "}" ;;
     "" | "#"*) ;;
     *) ghostplay_line "$ghostplay_line" ;;
   esac
