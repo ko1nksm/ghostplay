@@ -10,15 +10,6 @@ ghostplay_exit_handler() {
   ghostplay_cleanup_handler
 }
 
-trap 'ghostplay_sigint_handler' INT
-trap 'ghostplay_exit_handler' EXIT
-
-GP_USERNAME=$(whoami)
-GP_HOSTNAME=$(hostname)
-GP_SOURCE=$1
-
-eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
-
 ghostplay_custom_sleep() {
   sleep "$1"
 }
@@ -128,6 +119,17 @@ ghostplay_directive_end() {
 ghostplay_directive_sleep() {
   ghostplay_sleep "$1"
 }
+
+[ ${SHELLSPEC_VERSION:-} ] && return 0
+
+trap 'ghostplay_sigint_handler' INT
+trap 'ghostplay_exit_handler' EXIT
+
+GP_USERNAME=$(whoami)
+GP_HOSTNAME=$(hostname)
+GP_SOURCE=$1
+
+eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
 
 ghostplay_mode=""
 ghostplay_buf=""
