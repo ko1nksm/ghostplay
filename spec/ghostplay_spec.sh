@@ -1,4 +1,7 @@
+#shellcheck shell=sh
+
 Describe 'ghostplay'
+  # shellcheck disable=SC1091
   . ./ghostplay
 
   ghostplay_before_prompt_hook() { :; }
@@ -68,7 +71,7 @@ Describe 'ghostplay'
   Describe 'ghostplay_input()'
     Before n=0
     Example 'types 5 characters when given the string ABCDE'
-      ghostplay_type() { echo $1; n=$((n+1)); }
+      ghostplay_type() { echo "$1"; n=$((n+1)); }
       When call ghostplay_input ABCDE
       The line 1 of output should equal 'A'
       The line 2 of output should equal 'B'

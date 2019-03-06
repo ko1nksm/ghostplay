@@ -143,9 +143,10 @@ eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
 
 GP_USERNAME=$(whoami)
 GP_HOSTNAME=$(hostname)
+# shellcheck disable=SC2034
 GP_SOURCE=$1
 
-[ ${SHELLSPEC_VERSION:-} ] && return 0
+[ "${SHELLSPEC_VERSION:-}" ] && return 0
 
 trap 'ghostplay_sigint_handler' INT
 trap 'ghostplay_exit_handler' EXIT
