@@ -29,6 +29,18 @@ See what happens in your terminal. Ghost is typing your script!
 
 Another example scripts is in the [example](/example) directory.
 
+## Installation
+
+**Just get the ghostplay and create a symlink in your PATH!**
+
+For example
+
+```sh
+$ git clone https://github.com/ko1nksm/ghostplay.git
+$ ln -s $PWD/ghostplay/ghostplay /EXECUTABLE/PATH/
+# (e.g. /EXECUTABLE/PATH/ = /usr/local/bin/, $HOME/bin/)
+```
+
 ## Cooperation with terminal recorder
 
 To create terminal demo, you can use `asciinema`, `ttyrec` or
