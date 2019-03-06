@@ -1,5 +1,7 @@
 # ghostplay
 
+[![Build Status](https://travis-ci.org/ko1nksm/ghostplay.svg?branch=master)](https://travis-ci.org/ko1nksm/ghostplay)
+
 ghostplay is an automatic terminal input tool.
 
 Intended to create terminal demo that can easily modified for documentation.
