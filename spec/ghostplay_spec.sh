@@ -5,6 +5,7 @@ Describe 'ghostplay'
   ghostplay_after_prompt_hook() { :; }
   ghostplay_before_type_hook() { :; }
   ghostplay_after_type_hook() { :; }
+  ghostplay_custom_prompt() { shellspec_puts '$ '; }
 
   Describe 'ghostplay_sigint_handler()'
     Example 'should exit with 1'
@@ -98,11 +99,100 @@ Describe 'ghostplay'
   End
 
   Describe 'ghostplay_command_and_exec()'
-    ghostplay_custom_prompt() { shellspec_puts '$ '; }
     Example 'output prompt and exec'
       When call ghostplay_command_and_exec "echo 123"
       The first line of output should equal '$ echo 123'
       The second line of output should equal '123'
+    End
+  End
+
+  Describe 'ghostplay_parse_script()'
+    parse_script() { script | ghostplay_parse_script; }
+    Example 'execute by line'
+      script() {
+        printf '%s\n' \
+          'echo 1' \
+          'echo 2' \
+          ''
+      }
+      When call parse_script
+      The line 1 of output should equal '$ echo 1'
+      The line 2 of output should equal '1'
+      The line 3 of output should equal '$ echo 2'
+      The line 4 of output should equal '2'
+    End
+
+    Example 'execute with batch'
+      script() {
+        printf '%s\n' \
+          '#ghostplay batch' \
+          'echo 1' \
+          'echo 2' \
+          '#ghostplay end' \
+          ''
+      }
+      When call parse_script
+      The line 1 of output should equal '$ echo 1'
+      The line 2 of output should equal 'echo 2'
+      The line 3 of output should equal '1'
+      The line 4 of output should equal '2'
+    End
+
+    Example 'execute with batch and flush'
+      script() {
+        printf '%s\n' \
+          '#ghostplay batch' \
+          'echo 1' \
+          '#ghostplay flush' \
+          'echo 2' \
+          '#ghostplay end' \
+          ''
+      }
+      When call parse_script
+      The line 1 of output should equal '$ echo 1'
+      The line 2 of output should equal '1'
+      The line 3 of output should equal '$ echo 2'
+      The line 4 of output should equal '2'
+    End
+
+    Example 'execute with silent'
+      script() {
+        printf '%s\n' \
+          '#ghostplay silent' \
+          'echo 1' \
+          'echo 2' \
+          '#ghostplay end' \
+          ''
+      }
+      When call parse_script
+      The line 1 of output should equal '1'
+      The line 2 of output should equal '2'
+    End
+
+    Example 'execute with fake'
+      script() {
+        printf '%s\n' \
+          '#ghostplay fake' \
+          'echo 1' \
+          'echo 2' \
+          '#ghostplay end' \
+          ''
+      }
+      When call parse_script
+      The line 1 of output should equal '$ echo 1'
+      The line 2 of output should equal 'echo 2'
+      The line 3 of output should be blank
+    End
+
+    Example 'execute with sleep'
+      sleep() { echo "$@"; }
+      script() {
+        printf '%s\n' \
+          '#ghostplay sleep 5' \
+          ''
+      }
+      When call parse_script
+      The output should equal 5
     End
   End
 End
