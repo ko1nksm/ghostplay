@@ -1,0 +1,4 @@
+language: sh
+before_install:
+  - git clone --depth 1 https://github.com/ko1nksm/shellspec.git
+script: shellspec/shellspec"
