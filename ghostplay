@@ -24,7 +24,7 @@ ghostplay_puts() {
 
 ghostplay_custom_prompt() {
   ghostplay_puts "${GP_ESC}[32m${GP_USERNAME}@${GP_HOSTNAME}" \
-          "${GP_ESC}[35m${PWD##*/}${GP_ESC}[0m\$ "
+          "${GP_ESC}[35m${PWD##*/}${GP_ESC}[0m\$ ${*:-}"
 }
 
 ghostplay_prompt() {
@@ -71,6 +71,12 @@ ghostplay_after_type_hook() {
 ghostplay_command_and_exec() {
   ghostplay_command "$1"
   ghostplay_exec "$1"
+  ghostplay_prompt
+}
+
+ghostplay_command_and_fake() {
+  ghostplay_command "$1"
+  ghostplay_prompt
 }
 
 ghostplay_exec() {
@@ -78,7 +84,6 @@ ghostplay_exec() {
 }
 
 ghostplay_command() {
-  ghostplay_prompt
   ghostplay_input "$1"
 }
 
@@ -106,7 +111,7 @@ ghostplay_directive_flush() {
   case $ghostplay_mode in
     batch) ghostplay_command_and_exec "$ghostplay_buf" ;;
     silent) ghostplay_exec "$ghostplay_buf" ;;
-    fake) ghostplay_command "$ghostplay_buf" ;;
+    fake) ghostplay_command_and_fake "$ghostplay_buf" ;;
   esac
   ghostplay_buf=""
 }
@@ -139,6 +144,11 @@ ghostplay_parse_script() {
   done
 }
 
+ghostplay_run() {
+  ghostplay_prompt
+  ghostplay_parse_script < "$1"
+}
+
 eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
 
 GP_USERNAME=$(whoami)
@@ -151,7 +161,7 @@ GP_SOURCE=$1
 trap 'ghostplay_sigint_handler' INT
 trap 'ghostplay_exit_handler' EXIT
 
-ghostplay_parse_script < "$1"
+ghostplay_run "$1"
 
 # workaround: seq2gif is lose the last line.
 echo

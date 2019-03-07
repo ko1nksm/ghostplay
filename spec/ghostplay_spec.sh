@@ -102,10 +102,19 @@ Describe 'ghostplay'
   End
 
   Describe 'ghostplay_command_and_exec()'
-    Example 'output prompt and exec'
+    Example 'output command and exec'
       When call ghostplay_command_and_exec "echo 123"
-      The first line of output should equal '$ echo 123'
+      The first line of output should equal 'echo 123'
       The second line of output should equal '123'
+      The third line of output should equal '$ '
+    End
+  End
+
+  Describe 'ghostplay_command_and_fake()'
+    Example 'output command and not exec'
+      When call ghostplay_command_and_fake "echo 123"
+      The first line of output should equal 'echo 123'
+      The second line of output should equal '$ '
     End
   End
 
@@ -119,7 +128,7 @@ Describe 'ghostplay'
           ''
       }
       When call parse_script
-      The line 1 of output should equal '$ echo 1'
+      The line 1 of output should equal 'echo 1'
       The line 2 of output should equal '1'
       The line 3 of output should equal '$ echo 2'
       The line 4 of output should equal '2'
@@ -135,10 +144,11 @@ Describe 'ghostplay'
           ''
       }
       When call parse_script
-      The line 1 of output should equal '$ echo 1'
+      The line 1 of output should equal 'echo 1'
       The line 2 of output should equal 'echo 2'
       The line 3 of output should equal '1'
       The line 4 of output should equal '2'
+      The line 5 of output should equal '$ '
     End
 
     Example 'execute with batch and flush'
@@ -152,10 +162,11 @@ Describe 'ghostplay'
           ''
       }
       When call parse_script
-      The line 1 of output should equal '$ echo 1'
+      The line 1 of output should equal 'echo 1'
       The line 2 of output should equal '1'
       The line 3 of output should equal '$ echo 2'
       The line 4 of output should equal '2'
+      The line 5 of output should equal '$ '
     End
 
     Example 'execute with silent'
@@ -170,6 +181,7 @@ Describe 'ghostplay'
       When call parse_script
       The line 1 of output should equal '1'
       The line 2 of output should equal '2'
+      The line 3 of output should be blank
     End
 
     Example 'execute with fake'
@@ -182,9 +194,9 @@ Describe 'ghostplay'
           ''
       }
       When call parse_script
-      The line 1 of output should equal '$ echo 1'
+      The line 1 of output should equal 'echo 1'
       The line 2 of output should equal 'echo 2'
-      The line 3 of output should be blank
+      The line 3 of output should equal '$ '
     End
 
     Example 'execute with sleep'
