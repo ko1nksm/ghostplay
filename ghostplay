@@ -84,6 +84,10 @@ ghostplay_exec() {
 }
 
 ghostplay_command() {
+  if [ "$GP_FIRST_PROMPT" ]; then
+      ghostplay_prompt
+      GP_FIRST_PROMPT=''
+  fi
   ghostplay_input "$1"
 }
 
@@ -145,8 +149,8 @@ ghostplay_parse_script() {
 }
 
 ghostplay_run() {
-  ghostplay_prompt
-  ghostplay_parse_script < "$1"
+  GP_FIRST_PROMPT=1
+  ghostplay_parse_script
 }
 
 eval "$(printf "GP_LF='\\012' GP_ESC='\\033'")"
@@ -161,7 +165,7 @@ GP_SOURCE=$1
 trap 'ghostplay_sigint_handler' INT
 trap 'ghostplay_exit_handler' EXIT
 
-ghostplay_run "$1"
+ghostplay_run < "$1"
 
 # workaround: seq2gif is lose the last line.
 echo

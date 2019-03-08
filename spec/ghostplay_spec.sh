@@ -118,8 +118,8 @@ Describe 'ghostplay'
     End
   End
 
-  Describe 'ghostplay_parse_script()'
-    parse_script() { script | ghostplay_parse_script; }
+  Describe 'ghostplay_run()'
+    run_script() { script | ghostplay_run; }
     Example 'execute by line'
       script() {
         printf '%s\n' \
@@ -127,8 +127,9 @@ Describe 'ghostplay'
           'echo 2' \
           ''
       }
-      When call parse_script
-      The line 1 of output should equal 'echo 1'
+
+      When call run_script
+      The line 1 of output should equal '$ echo 1'
       The line 2 of output should equal '1'
       The line 3 of output should equal '$ echo 2'
       The line 4 of output should equal '2'
@@ -143,8 +144,8 @@ Describe 'ghostplay'
           '#ghostplay end' \
           ''
       }
-      When call parse_script
-      The line 1 of output should equal 'echo 1'
+      When call run_script
+      The line 1 of output should equal '$ echo 1'
       The line 2 of output should equal 'echo 2'
       The line 3 of output should equal '1'
       The line 4 of output should equal '2'
@@ -161,8 +162,8 @@ Describe 'ghostplay'
           '#ghostplay end' \
           ''
       }
-      When call parse_script
-      The line 1 of output should equal 'echo 1'
+      When call run_script
+      The line 1 of output should equal '$ echo 1'
       The line 2 of output should equal '1'
       The line 3 of output should equal '$ echo 2'
       The line 4 of output should equal '2'
@@ -178,7 +179,7 @@ Describe 'ghostplay'
           '#ghostplay end' \
           ''
       }
-      When call parse_script
+      When call run_script
       The line 1 of output should equal '1'
       The line 2 of output should equal '2'
       The line 3 of output should be blank
@@ -193,8 +194,8 @@ Describe 'ghostplay'
           '#ghostplay end' \
           ''
       }
-      When call parse_script
-      The line 1 of output should equal 'echo 1'
+      When call run_script
+      The line 1 of output should equal '$ echo 1'
       The line 2 of output should equal 'echo 2'
       The line 3 of output should equal '$ '
     End
@@ -206,7 +207,7 @@ Describe 'ghostplay'
           '#ghostplay sleep 5' \
           ''
       }
-      When call parse_script
+      When call run_script
       The output should equal 5
     End
   End
